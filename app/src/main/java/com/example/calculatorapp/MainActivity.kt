@@ -106,6 +106,10 @@ class MainActivity : ComponentActivity() {
             var y = "";
             var f = "";
             var res = "";
+            if(req == ";"){
+                Result.text = "Error! Пустое выражение.";
+                return@setOnClickListener;
+            }
             for (i in req.indices) {
                 if (req[i].isDigit()) {
                     if (f == "") {
@@ -114,8 +118,17 @@ class MainActivity : ComponentActivity() {
                         y += req[i];
                     }
                 } else {
-                    f += req[i]; }
+                    f += req[i];
+                }
                 if (req[i+1] == '+' || req[i+1] == '-' || req[i+1] == '*' || req[i+1] == '/' || req[i+1] == ';') {
+                    if (x == ""){
+                        Result.text = "Error! Отсутствует X";
+                        return@setOnClickListener;
+                    }
+                    if (y == ""){
+                        Result.text = "ERROR!!! Y пуста или использовано более 1 оператора подряд!";
+                        return@setOnClickListener;
+                    }
                     if (f == "+") {
                         x = (x.toInt() + y.toInt()).toString();
                         y = "";
