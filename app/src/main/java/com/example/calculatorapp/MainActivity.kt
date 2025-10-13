@@ -20,16 +20,16 @@ class MainActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        val b0 = findViewById < Button >(R.id.b0);
-        val b1 = findViewById < Button >(R.id.b1);
-        val b2 = findViewById < Button >(R.id.b2);
-        val b3 = findViewById < Button >(R.id.b3);
-        val b4 = findViewById < Button >(R.id.b4);
-        val b5 = findViewById < Button >(R.id.b5);
-        val b6 = findViewById < Button >(R.id.b6);
-        val b7 = findViewById < Button >(R.id.b7);
-        val b8 = findViewById < Button >(R.id.b8);
-        val b9 = findViewById < Button >(R.id.b9);
+        val b0 = findViewById<Button>(R.id.b0);
+        val b1 = findViewById<Button>(R.id.b1);
+        val b2 = findViewById<Button>(R.id.b2);
+        val b3 = findViewById<Button>(R.id.b3);
+        val b4 = findViewById<Button>(R.id.b4);
+        val b5 = findViewById<Button>(R.id.b5);
+        val b6 = findViewById<Button>(R.id.b6);
+        val b7 = findViewById<Button>(R.id.b7);
+        val b8 = findViewById<Button>(R.id.b8);
+        val b9 = findViewById<Button>(R.id.b9);
 
         val bM = findViewById<Button>(R.id.bM);
         val bP = findViewById<Button>(R.id.bP);
@@ -40,151 +40,119 @@ class MainActivity : ComponentActivity() {
         val bC = findViewById<Button>(R.id.bC);
         val Result = findViewById<TextView>(R.id.textView2);
 
-        var x = "";
-        var f = 'O';
-        var y = "";
+        var req = "";
 
-        fun ShowR(){
-            var txt = "";
-            if(x != ""){
-                txt += x;
-            }
-            if(f != 'O'){
-                txt += f;
-            }
-            if(y != ""){
-                txt += y;
-            }
-            Result.text = txt;
-        }
         b0.setOnClickListener {
-            if(f == 'O'){
-                x += "0";
-            } else {
-                y += "0";
-            }
-            ShowR();
+            req += 0;
+            Result.text = req;
         }
         b1.setOnClickListener {
-            if(f == 'O'){
-                x += "1";
-            } else {
-                y += "1";
-            }
-            ShowR();
+            req += 1;
+            Result.text = req;
         }
         b2.setOnClickListener {
-            if(f == 'O'){
-                x += "2";
-            } else {
-                y += "2";
-            }
-            ShowR();
+            req += 2;
+            Result.text = req;
         }
         b3.setOnClickListener {
-            if(f == 'O'){
-                x += 3;
-            } else {
-                y += 3;
-            }
-            ShowR();
+            req += 3;
+            Result.text = req;
         }
         b4.setOnClickListener {
-            if(f == 'O'){
-                x += 4;
-            } else {
-                y += 4;
-            }
-            ShowR();
+            req += 4;
+            Result.text = req;
         }
         b5.setOnClickListener {
-            if(f == 'O'){
-                x += 5;
-            } else {
-                y += 5;
-            }
-            ShowR();
+            req += 5;
+            Result.text = req;
         }
         b6.setOnClickListener {
-            if(f == 'O'){
-                x += 6;
-            } else {
-                y += 6;
-            }
-            ShowR();
+            req += 6;
+            Result.text = req;
         }
         b7.setOnClickListener {
-            if(f == 'O'){
-                x += 7;
-            } else {
-                y += 7;
-            }
-            ShowR();
+            req += 7;
+            Result.text = req;
         }
         b8.setOnClickListener {
-            if(f == 'O'){
-                x += 8;
-            } else {
-                y += 8;
-            }
-            ShowR();
+            req += 8;
+            Result.text = req;
         }
         b9.setOnClickListener {
-            if(f == 'O'){
-                x += 9;
-            } else {
-                y += 9;
-            }
-            ShowR();
+            req += 9;
+            Result.text = req;
         }
 
         bM.setOnClickListener {
-            if(x != ""){
-                f = '-';
-            }
-            ShowR();
+            req += "-";
+            Result.text = req;
         }
         bP.setOnClickListener {
-            if(x != ""){
-                f = '+';
-            }
-            ShowR();
+            req += "+";
+            Result.text = req;
         }
         bMu.setOnClickListener {
-            if(x != ""){
-                f = '*';
-            }
-            ShowR();
+            req += "*";
+            Result.text = req;
         }
         bDel.setOnClickListener {
-            if(x != ""){
-                f = '/';
-            }
-            ShowR();
+            req += "/";
+            Result.text = req;
         }
 
         bE.setOnClickListener {
-            if(f == '+'){
-                Result.text = (x.toInt()+y.toInt()).toString();
+            req += ";"
+            var x = "";
+            var y = "";
+            var f = "";
+            var res = "";
+            for (i in req.indices) {
+                if (req[i].isDigit()) {
+                    if (f == "") {
+                        x += req[i];
+                    } else {
+                        y += req[i];
+                    }
+                } else {
+                    f += req[i]; }
+                if (req[i+1] == '+' || req[i+1] == '-' || req[i+1] == '*' || req[i+1] == '/' || req[i+1] == ';') {
+                    if (f == "+") {
+                        x = (x.toInt() + y.toInt()).toString();
+                        y = "";
+                        f = "";
+                        break;
+                    }
+                    if (f == "-") {
+                        x = (x.toInt() - y.toInt()).toString();
+                        y = "";
+                        f = "";
+                        break;
+                    }
+                    if (f == "*") {
+                        x = (x.toInt() * y.toInt()).toString();
+                        y = "";
+                        f = "";
+                        break;
+                    }
+                    if (f == "/") {
+                        if(y == "0"){
+                            Result.text = "Error! x/0";
+                            return@setOnClickListener;
+                        }
+                        x = (x.toInt() / y.toInt()).toString();
+                        y = "";
+                        f = "";
+                        break;
+                    }
+                }
+                if(req[i+1] == ';') { break; }
             }
-            else if(f == '-'){
-                Result.text = (x.toInt()-y.toInt()).toString();
-            }
-            else if(f == '*'){
-                Result.text = (x.toInt()*y.toInt()).toString();
-            }
-            else if(f == '/'){
-                if(y != "0") {
-                    Result.text = (x.toFloat() / y.toFloat()).toString();
-                } else { Result.text = "ERROR!"; }
-            }
-        }
+            Result.text = x;
 
+        }
         bC.setOnClickListener {
-            x = "";
-            f = 'O';
-            y = "";
-            ShowR();
+            req = "";
+            Result.text = req;
         }
     }
 }
