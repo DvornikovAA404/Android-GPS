@@ -7,7 +7,6 @@ import androidx.activity.ComponentActivity
 import android.Manifest
 import android.content.pm.PackageManager
 import android.provider.MediaStore
-import android.util.Log
 import android.net.Uri
 import android.content.Context
 import android.os.Handler
@@ -22,25 +21,19 @@ import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 
-
-class AudioFile(
-    val id: Long,
-    val uri: Uri,
-    val title: String,
-    val duration: Long,
-    val albumId: Long
-)
-
 class MediaActivity : ComponentActivity() {
     var audioFiles: List<AudioFile> = emptyList()
     val history = mutableListOf<AudioFile>()
     var Player : MediaPlayer? = null
+    var globalAudioFiles: List<AudioFile> = emptyList()
+    var globalSelectedTrack = -1
     lateinit var name: TextView
     lateinit var oblojka: ImageView
     lateinit var back: Button
     lateinit var pause: Button
     lateinit var next: Button
     lateinit var seekBar: SeekBar
+    lateinit var bMenu: Button
     var Ind = -1
 
     val handler = Handler(Looper.getMainLooper())
@@ -76,8 +69,7 @@ class MediaActivity : ComponentActivity() {
         pause = findViewById<Button>(R.id.bPause)
         next = findViewById<Button>(R.id.bNext)
         seekBar = findViewById<SeekBar>(R.id.seekBar)
-
-
+        bMenu = findViewById(R.id.bMenu)
 
         if (ContextCompat.checkSelfPermission(this, Manifest.permission.READ_MEDIA_AUDIO)
             != PackageManager.PERMISSION_GRANTED) {
@@ -126,6 +118,23 @@ class MediaActivity : ComponentActivity() {
             override fun onStartTrackingTouch(seekBar: SeekBar?) { }
             override fun onStopTrackingTouch(seekBar: SeekBar?) { }
         })
+
+        bMenu.setOnClickListener {
+            if (audioFiles.isEmpty()) return@setOnClickListener
+
+            val intent = Intent(this, TrackListActivity::class.java)
+            intent.putExtra("titles", audioFiles.map { it.title }.toTypedArray())
+            intent.putExtra("ids", audioFiles.map { it.id }.toLongArray())
+            intent.putExtra("durations", audioFiles.map { it.duration }.toLongArray())
+            intent.putExtra("albumIds", audioFiles.map { it.albumId }.toLongArray())
+            startActivityForResult(intent, 100)
+        }
+
+
+
+
+
+
     }
 
     fun Next() {
@@ -199,4 +208,27 @@ class MediaActivity : ComponentActivity() {
 
         return audio
     }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if (requestCode == 100 && resultCode == RESULT_OK && data != null) {
+            val trackId = data.getLongExtra("selectedTrackId", -1L)
+
+            if (trackId > 0) {
+                val selectedTrack = audioFiles.find { it.id == trackId }
+
+                if (selectedTrack != null) {
+                    history.add(selectedTrack)
+                    Ind = history.lastIndex
+                    Play(selectedTrack)
+                }
+            }
+        }
+    }
+
+
+
+
+
 }
