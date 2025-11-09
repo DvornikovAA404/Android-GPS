@@ -13,30 +13,28 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.CalculatorApp">
+
         <activity
-            android:name=".TrackListActivity"
-            android:exported="true" />
+            android:name=".MainActivity"
+            android:exported="true"
+            android:label="@string/title_activity_main"
+            android:theme="@style/Theme.CalculatorApp">
+            <intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>
+        </activity>
+
         <activity
             android:name=".MediaActivity"
             android:exported="true"
             android:label="@string/title_activity_media"
             android:theme="@style/Theme.CalculatorApp" />
-        <activity
-            android:name=".MainActivity"
-            android:exported="true"
-            android:label="@string/title_activity_main"
-            android:theme="@style/Theme.CalculatorApp" />
-        <activity
-            android:name=".CalcActivity"
-            android:exported="true"
-            android:label="@string/app_name"
-            android:theme="@style/Theme.CalculatorApp">
-            <intent-filter>
-                <action android:name="android.intent.action.MAIN" />
 
-                <category android:name="android.intent.category.LAUNCHER" />
-            </intent-filter>
-        </activity>
+        <activity
+            android:name=".TrackListActivity"
+            android:exported="true" />
+
     </application>
 
 </manifest>

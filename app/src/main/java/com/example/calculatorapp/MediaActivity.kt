@@ -136,6 +136,41 @@ class MediaActivity : ComponentActivity() {
 
 
     }
+    fun quickSort(
+        list: MutableList<AudioFile>,
+        low: Int = 0,
+        high: Int = list.size - 1
+    ) {
+        if (low < high) {
+            val pi = partition(list, low, high)
+            quickSort(list, low, pi - 1)
+            quickSort(list, pi + 1, high)
+        }
+    }
+
+    private fun partition(
+        list: MutableList<AudioFile>,
+        low: Int,
+        high: Int
+    ): Int {
+        val opornoyTrek = list[high].title
+        var poziciya = low - 1
+        for (index in low until high) {
+            val sravnenie = list[index].title.compareTo(opornoyTrek, ignoreCase = true)
+            if (sravnenie < 0) {
+                poziciya = poziciya + 1
+                val vremenniy = list[poziciya]
+                list[poziciya] = list[index]
+                list[index] = vremenniy
+            }
+        }
+        val vremenniy2 = list[poziciya + 1]
+        list[poziciya + 1] = list[high]
+        list[high] = vremenniy2
+
+        return poziciya + 1
+    }
+
 
     fun Next() {
         if (audioFiles.isEmpty()) return
@@ -206,7 +241,10 @@ class MediaActivity : ComponentActivity() {
             }
         }
 
-        return audio
+        val mutableAudio = audio.toMutableList()
+        quickSort(mutableAudio)
+
+        return mutableAudio
     }
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
